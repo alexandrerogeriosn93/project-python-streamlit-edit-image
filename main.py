@@ -1,5 +1,6 @@
 import cv2
 import streamlit as st
+from PIL import Image
 
 
 def main():
@@ -9,10 +10,15 @@ def main():
     )
     st.text("Streamlit com OpenCV")
 
-    image = cv2.imread("img/placeholder.png")
+    image = st.file_uploader("Envie sua imagem", type=["jpg", "png", "jpeg"])
+
+    if not image:
+        return None
+
+    image_original = Image.open(image)
 
     st.text("Imagem original")
-    st.image(image)
+    st.image(image_original)
 
 
 if __name__ == "__main__":
