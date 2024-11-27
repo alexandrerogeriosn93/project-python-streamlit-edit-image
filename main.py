@@ -1,5 +1,6 @@
 import cv2
 import streamlit as st
+import numpy as np
 from PIL import Image
 
 
@@ -32,9 +33,16 @@ def main():
         return None
 
     image_original = Image.open(image)
+    image_original = np.array(image_original)
 
-    st.text("Imagem original")
-    st.image(image_original)
+    image_processed = to_blur_image(image_original, blur_level)
+    image_processed = to_shine_image(image_processed, shine_level)
+
+    if filter_level:
+        image_processed = to_enhance_detail(image_processed)
+
+    st.text("Imagem original vs Imagem processada")
+    st.image([image_original, image_processed])
 
 
 if __name__ == "__main__":
