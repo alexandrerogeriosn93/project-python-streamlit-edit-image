@@ -2,7 +2,7 @@ import cv2
 import streamlit as st
 import numpy as np
 from PIL import Image
-from skimage import morphology, io, color, feature, filters
+from skimage import morphology, filters
 
 
 def to_shine_image(image, result):
@@ -33,7 +33,10 @@ def main():
     blur_level = st.sidebar.slider("Blur", min_value=0.2, max_value=3.5)
     shine_level = st.sidebar.slider("Brilho", min_value=-50, max_value=50, value=0)
     filter_level = st.sidebar.checkbox("Melhorar detalhes da imagem")
-    gray_image = st.sidebar.checkbox("Converter para a escala de cinza")
+    image_gray = st.sidebar.checkbox("Converter para a escala de cinza")
+    image_erosion = st.sidebar.checkbox("Filtro erosão")
+    image_dilation = st.sidebar.checkbox("Filtro dilatação")
+    image_edge = st.sidebar.checkbox("Filtro Edge")
 
     if not image:
         return None
@@ -47,8 +50,17 @@ def main():
     if filter_level:
         image_processed = to_enhance_detail(image_processed)
 
-    if gray_image:
+    if image_gray:
         image_processed = change_image_to_gray(image_processed)
+
+    if image_erosion:
+        image_processed = morphology.erosion(image_processed)
+
+    if image_dilation:
+        image_processed = morphology.dilation(image_processed)
+
+    if image_edge:
+        image_processed = filters.sobel(image_processed)
 
     st.text("Imagem original vs Imagem processada")
     st.image([image_original, image_processed])
