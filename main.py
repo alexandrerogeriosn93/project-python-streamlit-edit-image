@@ -16,6 +16,10 @@ def to_enhance_detail(image):
     return cv2.detailEnhance(image, sigma_s=34, sigma_r=0.50)
 
 
+def change_image_to_gray(image):
+    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+
 def main():
     st.title("OpenCV Data App")
     st.subheader(
@@ -28,6 +32,7 @@ def main():
     blur_level = st.sidebar.slider("Blur", min_value=0.2, max_value=3.5)
     shine_level = st.sidebar.slider("Brilho", min_value=-50, max_value=50, value=0)
     filter_level = st.sidebar.checkbox("Melhorar detalhes da imagem")
+    gray_image = st.sidebar.checkbox("Converter para a escala de cinza")
 
     if not image:
         return None
@@ -40,6 +45,9 @@ def main():
 
     if filter_level:
         image_processed = to_enhance_detail(image_processed)
+
+    if gray_image:
+        image_processed = change_image_to_gray(image_processed)
 
     st.text("Imagem original vs Imagem processada")
     st.image([image_original, image_processed])
