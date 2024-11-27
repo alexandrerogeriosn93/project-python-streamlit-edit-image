@@ -2,6 +2,7 @@ import cv2
 import streamlit as st
 import numpy as np
 from PIL import Image
+from skimage import morphology, io, color, feature, filters
 
 
 def to_shine_image(image, result):
